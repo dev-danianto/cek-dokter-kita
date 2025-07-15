@@ -4,104 +4,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>People Search Results</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Hasil Pencarian untuk "{{ $query }}"</title>
+
+    <!-- Styles / Scripts -->
+    @vite('resources/css/app.css')
 </head>
 
-<body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                <!-- Search Box -->
-                <div class="mb-4">
-                    <form action="{{ route('search.results') }}" method="GET">
-                        <div class="input-group">
-                            <input type="text" name="query" class="form-control"
-                                placeholder="Search people, education, certifications..." value="{{ $query }}">
-                            <button class="btn btn-primary" type="submit">Search</button>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Logo dan Search Bar -->
+        <div class="text-center w-full max-w-3xl mx-auto mb-8">
+            <a href="{{ url('/') }}">
+                <img src="{{ asset('images/search-images.png') }}" alt="Search Image"
+                    class="w-full max-w-[150px] sm:max-w-[200px] h-auto mx-auto mb-4">
+            </a>
+
+            <!-- Search Bar -->
+            <form action="{{ route('search.results') }}" method="GET" class="w-full max-w-lg mx-auto">
+                <div
+                    class="flex items-center bg-white border border-gray-300 rounded-full px-4 py-2 shadow-sm hover:shadow-md transition">
+                    <input type="text" name="query" placeholder="Cari Dokter Anda"
+                        class="flex-grow bg-transparent focus:outline-none text-gray-700 text-base"
+                        value="{{ $query ?? '' }}" />
+                    <button type="submit" class="ml-2">
+                        <div class="bg-blue-100 p-1.5 rounded-full hover:bg-blue-200 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="currentColor"
+                                viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M12.9 14.32a8 8 0 111.41-1.41l4.1 4.1a1 1 0 01-1.42 1.42l-4.1-4.1zM14 8a6 6 0 11-12 0 6 6 0 0112 0z"
+                                    clip-rule="evenodd" />
+                            </svg>
                         </div>
-                    </form>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bagian Hasil Pencarian -->
+        <div class="w-full max-w-5xl mx-auto">
+            @if (!empty($query))
+                <!-- Info Hasil Pencarian -->
+                <div class="mb-6 px-2">
+                    <h2 class="text-xl font-semibold text-gray-800">Hasil pencarian untuk: "{{ $query }}"</h2>
+                    <p class="text-gray-600">Ditemukan {{ $results->total() }} orang</p>
                 </div>
 
-                <!-- Results Info -->
-                <div class="mb-3">
-                    <h4>Search Results for: "{{ $query }}"</h4>
-                    <p>Found {{ $results->total() }} people</p>
-                </div>
-
-                <!-- Results -->
+                <!-- Kartu Hasil -->
                 @if ($results->count() > 0)
-                    <div class="row">
+                    <div class="space-y-6">
                         @foreach ($results as $person)
-                            <div class="col-md-12 mb-4">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <h5 class="card-title">{{ $person->name }}</h5>
-                                                <p class="card-text">
-                                                    <strong>{{ $person->job_title }}</strong>
-                                                    @if ($person->company)
-                                                        <br>{{ $person->company }}
-                                                    @endif
-                                                </p>
+                            <div
+                                class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                                <div class="p-6 md:p-8">
+                                    <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
+                                        <!-- Info Personal (Kolom Kiri) -->
+                                        <div
+                                            class="md:col-span-2 border-b md:border-b-0 md:border-r pb-6 md:pb-0 md:pr-8">
+                                            <h3 class="text-2xl font-bold text-gray-900">{{ $person->name }}</h3>
+                                            <p class="text-lg text-blue-600 font-medium mt-1">{{ $person->job_title }}
+                                            </p>
+                                            @if ($person->company)
+                                                <p class="text-gray-700">{{ $person->company }}</p>
+                                            @endif
 
-                                                <p class="card-text">
-                                                    <small class="text-muted">📧 {{ $person->email }}</small><br>
-                                                    @if ($person->phone)
-                                                        <small class="text-muted">📞 {{ $person->phone }}</small><br>
-                                                    @endif
-                                                    @if ($person->city)
-                                                        <small class="text-muted">📍 {{ $person->city }}</small>
-                                                    @endif
-                                                </p>
-
-                                                @if ($person->bio)
-                                                    <p class="card-text">
-                                                        <small>{{ $person->bio }}</small>
-                                                    </p>
+                                            <div class="mt-6 space-y-2 text-sm text-gray-600">
+                                                <p class="flex items-center"><span class="w-5">📧</span>
+                                                    {{ $person->email }}</p>
+                                                @if ($person->city)
+                                                    <p class="flex items-center"><span class="w-5">📍</span>
+                                                        {{ $person->city }}</p>
                                                 @endif
                                             </div>
 
-                                            <div class="col-md-4">
-                                                <h6 class="text-primary">🎓 Education</h6>
-                                                @if ($person->education->count() > 0)
-                                                    @foreach ($person->education as $edu)
-                                                        <div class="mb-2">
-                                                            <strong>{{ $edu->degree }}</strong> in
-                                                            {{ $edu->major }}<br>
-                                                            <small class="text-muted">{{ $edu->institution }}
-                                                                ({{ $edu->start_year }}-{{ $edu->end_year ?? 'Present' }})</small>
-                                                            @if ($edu->gpa)
-                                                                <small class="text-muted">- GPA:
-                                                                    {{ $edu->gpa }}</small>
-                                                            @endif
+                                            @if ($person->bio)
+                                                <p
+                                                    class="mt-6 text-sm text-gray-500 italic border-l-4 border-gray-200 pl-4">
+                                                    {{ $person->bio }}
+                                                </p>
+                                            @endif
+                                        </div>
+
+                                        <!-- Pendidikan & Sertifikasi (Kolom Kanan) -->
+                                        <div class="md:col-span-3 space-y-6">
+                                            <!-- Pendidikan -->
+                                            <div>
+                                                <h4 class="text-lg font-semibold text-gray-700 mb-3">Pendidikan</h4>
+                                                <div class="space-y-3">
+                                                    @forelse ($person->education as $edu)
+                                                        <div>
+                                                            <p class="font-semibold text-gray-800">{{ $edu->degree }}
+                                                                - {{ $edu->major }}</p>
+                                                            <p class="text-sm text-gray-600">{{ $edu->institution }}
+                                                            </p>
                                                         </div>
-                                                    @endforeach
-                                                @else
-                                                    <small class="text-muted">No education information</small>
-                                                @endif
+                                                    @empty
+                                                        <p class="text-sm text-gray-500">Tidak ada informasi pendidikan.
+                                                        </p>
+                                                    @endforelse
+                                                </div>
                                             </div>
 
-                                            <div class="col-md-4">
-                                                <h6 class="text-success">🏆 Certifications</h6>
-                                                @if ($person->certifications->count() > 0)
-                                                    @foreach ($person->certifications as $cert)
-                                                        <div class="mb-2">
-                                                            <strong>{{ $cert->name }}</strong><br>
-                                                            <small
-                                                                class="text-muted">{{ $cert->issuing_organization }}</small><br>
-                                                            <small
-                                                                class="text-muted">{{ $cert->issue_date->format('M Y') }}
-                                                                @if ($cert->expiry_date)
-                                                                    - {{ $cert->expiry_date->format('M Y') }}
-                                                                @endif
-                                                            </small>
+                                            <!-- Sertifikasi -->
+                                            <div>
+                                                <h4 class="text-lg font-semibold text-gray-700 mb-3">Sertifikasi</h4>
+                                                <div class="space-y-3">
+                                                    @forelse ($person->certifications as $cert)
+                                                        <div>
+                                                            <p class="font-semibold text-gray-800">{{ $cert->name }}
+                                                            </p>
+                                                            <p class="text-sm text-gray-600">
+                                                                {{ $cert->issuing_organization }}</p>
                                                         </div>
-                                                    @endforeach
-                                                @else
-                                                    <small class="text-muted">No certifications</small>
-                                                @endif
+                                                    @empty
+                                                        <p class="text-sm text-gray-500">Tidak ada informasi
+                                                            sertifikasi.</p>
+                                                    @endforelse
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -111,17 +129,17 @@
                     </div>
 
                     <!-- Pagination -->
-                    <div class="d-flex justify-content-center">
+                    <div class="mt-8">
                         {{ $results->appends(['query' => $query])->links() }}
                     </div>
                 @else
-                    <div class="alert alert-info">
-                        <h5>No people found</h5>
-                        <p>Try searching with different keywords like names, universities, certifications, or skills.
+                    <div class="text-center bg-white p-8 rounded-lg shadow-md border">
+                        <h3 class="text-2xl font-semibold text-gray-700">Tidak ada hasil ditemukan</h3>
+                        <p class="text-gray-500 mt-2">Coba gunakan kata kunci lain untuk menemukan hasil yang Anda cari.
                         </p>
                     </div>
                 @endif
-            </div>
+            @endif
         </div>
     </div>
 </body>

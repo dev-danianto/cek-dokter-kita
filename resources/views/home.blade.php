@@ -17,9 +17,10 @@
                 class="w-full max-w-[200px] sm:max-w-[300px] lg:max-w-[400px] h-auto mx-auto">
 
             <!-- Search Bar -->
-            <form action="/search" method="GET" class="w-full max-w-[85vw] sm:max-w-sm lg:max-w-lg mx-auto">
+            <form action="{{ route('search.results') }}" method="GET"
+                class="w-full max-w-[85vw] sm:max-w-sm lg:max-w-lg mx-auto">
                 <div
-                    class="flex items-center bg-white bo rder border-gray-300 rounded-full px-2 sm:px-4 py-1.5 sm:py-2 shadow-sm hover:shadow-md transition">
+                    class="flex items-center bg-white border border-gray-300 rounded-full px-2 sm:px-4 py-1.5 sm:py-2 shadow-sm hover:shadow-md transition">
                     <input type="text" name="query" placeholder="Cari Dokter Anda"
                         class="flex-grow bg-transparent focus:outline-none text-gray-700 text-sm sm:text-base" />
                     <button type="submit" class="ml-1 sm:ml-2">
