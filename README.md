@@ -23,5 +23,5 @@
 1. Clone repository:
 
 ```bash
-git clone https://github.com/username/cek-dokter-kita.git
+git clone [https://github.com/username/cek-dokter-kita.git](https://github.com/dev-danianto/cek-dokter-kita.git)
 cd cek-dokter-kita
