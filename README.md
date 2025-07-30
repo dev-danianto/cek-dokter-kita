@@ -2,7 +2,7 @@
 
 **Cek Dokter Kita** adalah aplikasi web berbasis Laravel untuk memeriksa latar belakang dokter secara online. Dengan lebih dari **300 data dokter** dalam database, pengguna dapat mencari dan memverifikasi informasi dokter secara cepat dan mudah.
 
-🔗 **Live Website:** [https://cekdokterkita.xyz](https://cekdokterkita.xyz)
+🔗 **Live Website:** [https://www.cekdokterkita.danianto.xyz/](https://www.cekdokterkita.danianto.xyz/)
 
 ## 🚀 Fitur
 
